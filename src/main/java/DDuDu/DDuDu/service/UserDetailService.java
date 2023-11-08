@@ -3,7 +3,6 @@ package DDuDu.DDuDu.service;
 import DDuDu.DDuDu.domain.User;
 import DDuDu.DDuDu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
