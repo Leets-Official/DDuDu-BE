@@ -36,6 +36,14 @@ public class ItemController {
                 .body(items);
     }
 
+    @GetMapping("/item/{id}")
+    public ResponseEntity<ItemResponse> findItem(@PathVariable Long id) {
+        Item item = itemService.findById(id);
+
+        return ResponseEntity.ok()
+                .body(new ItemResponse(item));
+    }
+
     @DeleteMapping("/items/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.delete(id);
