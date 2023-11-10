@@ -15,8 +15,8 @@ public class AddItemRequest {
     private String content;
     private Date createDate;
     private Date deadline;
-    private boolean isCompleted;
-    private boolean isRoutine;
+    private Boolean isCompleted;
+    private Boolean isRoutine;
 
     public Item toEntity() {
         return Item.builder()

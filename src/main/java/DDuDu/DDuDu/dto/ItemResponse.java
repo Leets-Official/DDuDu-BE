@@ -10,13 +10,13 @@ public class ItemResponse {
 
     private final String content;
     private final Date deadline;
-    private final boolean isCompleted;
-    private final boolean isRoutine;
+    private final Boolean isCompleted;
+    private final Boolean isRoutine;
 
     public ItemResponse(Item item) {
         this.content = item.getContent();
         this.deadline = item.getDeadline();
-        this.isCompleted = item.isCompleted();
-        this.isRoutine = item.isRoutine();
+        this.isCompleted = item.getIsCompleted();
+        this.isRoutine = item.getIsRoutine();
     }
 }
