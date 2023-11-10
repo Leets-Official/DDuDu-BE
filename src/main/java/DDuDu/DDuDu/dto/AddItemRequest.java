@@ -24,7 +24,7 @@ public class AddItemRequest {
                 .creteDate(createDate)
                 .deadline(deadline)
                 .isCompleted(isCompleted)
-                .isCompleted(isRoutine)
+                .isRoutine(isRoutine)
                 .build();
     }
 }
