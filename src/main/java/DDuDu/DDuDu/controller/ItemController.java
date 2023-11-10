@@ -3,6 +3,7 @@ package DDuDu.DDuDu.controller;
 import DDuDu.DDuDu.domain.Item;
 import DDuDu.DDuDu.dto.AddItemRequest;
 import DDuDu.DDuDu.dto.ItemResponse;
+import DDuDu.DDuDu.dto.UpdateItemRequest;
 import DDuDu.DDuDu.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class ItemController {
                 .body(items);
     }
 
-    @GetMapping("/item/{id}")
+    @GetMapping("/items/{id}")
     public ResponseEntity<ItemResponse> findItem(@PathVariable Long id) {
         Item item = itemService.findById(id);
 
@@ -50,5 +51,14 @@ public class ItemController {
 
         return ResponseEntity.ok()
                 .build();
+    }
+
+    @PutMapping("items/{id}")
+    public ResponseEntity<Item> updateItem(@PathVariable Long id,
+                                           @RequestBody UpdateItemRequest request) {
+        Item updatedItem = itemService.update(id, request);
+
+        return ResponseEntity.ok()
+                .body(updatedItem);
     }
 }

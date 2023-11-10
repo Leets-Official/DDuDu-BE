@@ -1,5 +1,7 @@
 package DDuDu.DDuDu.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,6 +22,7 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Column(nullable = false)
@@ -41,6 +44,13 @@ public class Item {
     public Item(String content, Date createDate, Date deadline, boolean isCompleted, boolean isRoutine) {
         this.content = content;
         this.createDate = createDate;
+        this.deadline = deadline;
+        this.isCompleted = isCompleted;
+        this.isRoutine = isRoutine;
+    }
+
+    public void update(String content, Date deadline, boolean isCompleted, boolean isRoutine) {
+        this.content = content;
         this.deadline = deadline;
         this.isCompleted = isCompleted;
         this.isRoutine = isRoutine;
