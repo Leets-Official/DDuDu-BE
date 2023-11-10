@@ -20,7 +20,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeRequests()
-                .requestMatchers("/login/**", "/signup/**", "/exception/**").permitAll()
+                .requestMatchers("/login", "/signup/**","/exception/**", "/items/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
