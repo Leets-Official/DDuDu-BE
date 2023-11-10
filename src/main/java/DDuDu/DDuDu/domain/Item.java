@@ -16,9 +16,9 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id", updatable = false)
-    private long id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -26,7 +26,7 @@ public class Item {
     private String content;
 
     @Column(name = "create_date", nullable = false)
-    private Date creteDate;
+    private Date createDate;
 
     @Column(nullable = true)
     private Date deadline;
@@ -38,9 +38,9 @@ public class Item {
     private boolean isRoutine;
 
     @Builder
-    public Item(String content, Date creteDate, Date deadline, boolean isCompleted, boolean isRoutine) {
+    public Item(String content, Date createDate, Date deadline, boolean isCompleted, boolean isRoutine) {
         this.content = content;
-        this.creteDate = creteDate;
+        this.createDate = createDate;
         this.deadline = deadline;
         this.isCompleted = isCompleted;
         this.isRoutine = isRoutine;

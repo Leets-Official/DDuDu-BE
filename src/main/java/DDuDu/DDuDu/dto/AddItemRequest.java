@@ -21,7 +21,7 @@ public class AddItemRequest {
     public Item toEntity() {
         return Item.builder()
                 .content(content)
-                .creteDate(createDate)
+                .createDate(createDate)
                 .deadline(deadline)
                 .isCompleted(isCompleted)
                 .isRoutine(isRoutine)
