@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -51,7 +52,7 @@ class ItemControllerTest {
     @Test
     public void addArticle() throws Exception{
         //given
-        final String url = "/articles";
+        final String url = "/items";
         final String content = "content";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -76,5 +77,40 @@ class ItemControllerTest {
 
         assertThat(itemList.size()).isEqualTo(1);
         assertThat(itemList.get(0).getContent()).isEqualTo(content);
+    }
+
+    @DisplayName("투두 목록 조회에 성공한다.")
+    @Test
+    public void findAllItems() throws Exception {
+        // given
+        final String url = "/items";
+        final String content = "content";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        final Date createDate = dateFormat.parse("2023-11-09");
+        final Date deadline = dateFormat.parse("2023-11-11");
+        final boolean isCompleted = false;
+        final boolean isRoutine = false;
+
+        itemRepository.save(Item.builder()
+                .content(content)
+                .createDate(createDate)
+                .deadline(deadline)
+                .isCompleted(isCompleted)
+                .isRoutine(isRoutine)
+                .build());
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].content").value(content))
+                .andExpect(jsonPath("$[0].createDate").value(createDate))
+                .andExpect(jsonPath("$[0].deadline").value(deadline))
+                .andExpect(jsonPath("$[0].isCompleted").value(isCompleted))
+                .andExpect(jsonPath("$[0].isRoutine").value(isRoutine));
     }
 }

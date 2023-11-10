@@ -6,6 +6,8 @@ import DDuDu.DDuDu.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ItemService {
@@ -14,5 +16,9 @@ public class ItemService {
 
     public Item save(AddItemRequest request) {
         return itemRepository.save(request.toEntity());
+    }
+
+    public List<Item> findAll() {
+        return itemRepository.findAll();
     }
 }
