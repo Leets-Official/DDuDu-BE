@@ -19,14 +19,19 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests()
-                .requestMatchers("/login/**", "/signup/**","/exception/**", "/items/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
                 .csrf().disable()
+                .httpBasic().disable()
+                .authorizeRequests(request ->
+                        request.requestMatchers(
+                                "/login/**",
+                                "/signup/**",
+                                "/exception/**",
+                                "/items/**")
+                                .permitAll()
+                                .anyRequest().authenticated()
+                )
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception {
