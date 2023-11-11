@@ -1,10 +1,12 @@
 package DDuDu.DDuDu.service;
 
 import DDuDu.DDuDu.config.jwt.TokenProvider;
+import DDuDu.DDuDu.domain.RefreshToken;
 import DDuDu.DDuDu.domain.User;
 import DDuDu.DDuDu.dto.*;
 import DDuDu.DDuDu.repository.RefreshTokenRepository;
 import DDuDu.DDuDu.repository.UserRepository;
+import ch.qos.logback.core.subst.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,17 @@ public class UserService {
         }
         // 액세스토큰이 유효한지 판단하고 유효하지 않을 경우 createNewAccessToken 호출
         // 만약 리프레시 토큰이 유효 하지 않을 경우 다시 생성하는 로직 구성 리프레시 토큰 생성시 db에 저장 혹은 업데이트
+
+        Optional<RefreshToken> existingRefreshToken = refreshTokenRepository.findById(user.getId());
+
+        // Use the existing refresh token if it's valid; otherwise, generate a new one
+        RefreshToken refreshToken;
+        if (existingRefreshToken.isPresent() && tokenProvider.validToken(existingRefreshToken.get().getToken())) {
+            refreshToken = existingRefreshToken.get();
+        } else {
+            refreshToken = new RefreshToken(user.getId(), tokenProvider.generateToken(user,"Refresh"));
+            refreshTokenRepository.updateRefreshTokenById(refreshToken.getToken(),user.getId());
+        }
         return LoginResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

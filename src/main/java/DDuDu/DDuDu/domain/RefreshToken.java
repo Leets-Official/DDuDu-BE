@@ -31,4 +31,8 @@ public class RefreshToken {
         this.refreshToken = newRefreshToken;
         return this;
     }
+
+    public String getToken() {
+        return refreshToken;
+    }
 }
