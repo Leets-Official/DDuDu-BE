@@ -17,8 +17,6 @@ import java.util.Optional;
 // OncePerRequestFilter : 매번 들어갈 때 마다 체크 해주는 필터
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private final UserService userService;
-    private final String secretKey;
     private final TokenProvider tokenProvider;
     private final static String HEADER_AUTHORIZATION = "Authorization";
     private final static String TOKEN_PREFIX = "Bearer ";
@@ -27,15 +25,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain)
+            throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         String token = getAccessToken(authorizationHeader);
-        if (tokenProvider.validToken(token)) {
+        if (token != null && tokenProvider.validToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request,response);
     }
+
     private String getAccessToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             return authorizationHeader.substring(TOKEN_PREFIX.length());

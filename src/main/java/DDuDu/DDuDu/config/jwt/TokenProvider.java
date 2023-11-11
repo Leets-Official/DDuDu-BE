@@ -3,13 +3,10 @@ package DDuDu.DDuDu.config.jwt;
 import DDuDu.DDuDu.domain.User;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import java.time.Duration;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -35,6 +32,7 @@ public class TokenProvider {
                 .setSubject(user.getEmail())
                 .claim("id", user.getId())
                 .claim("email",user.getEmail())
+                .claim("authentication",user.getAuthorities())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -48,7 +46,6 @@ public class TokenProvider {
             return false;
         }
     }
-
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));

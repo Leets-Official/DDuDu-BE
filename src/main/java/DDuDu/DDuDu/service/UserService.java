@@ -6,7 +6,6 @@ import DDuDu.DDuDu.domain.User;
 import DDuDu.DDuDu.dto.*;
 import DDuDu.DDuDu.repository.RefreshTokenRepository;
 import DDuDu.DDuDu.repository.UserRepository;
-import ch.qos.logback.core.subst.Token;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,7 @@ public class UserService {
                 .build());
     }
 
+    @Transactional
     public LoginResponse loginService(LoginRequest request) throws Exception{
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -48,24 +48,20 @@ public class UserService {
         if (!encoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Invalid credentials");
         }
-        // 액세스토큰이 유효한지 판단하고 유효하지 않을 경우 createNewAccessToken 호출
-        // 만약 리프레시 토큰이 유효 하지 않을 경우 다시 생성하는 로직 구성 리프레시 토큰 생성시 db에 저장 혹은 업데이트
 
-        Optional<RefreshToken> existingRefreshToken = refreshTokenRepository.findById(user.getId());
-
-        // Use the existing refresh token if it's valid; otherwise, generate a new one
-        RefreshToken refreshToken;
-        if (existingRefreshToken.isPresent() && tokenProvider.validToken(existingRefreshToken.get().getToken())) {
-            refreshToken = existingRefreshToken.get();
-        } else {
-            refreshToken = new RefreshToken(user.getId(), tokenProvider.generateToken(user,"Refresh"));
+        RefreshToken refreshToken = new RefreshToken(user.getId(), tokenProvider.generateToken(user,"Refresh"));
+        if (refreshTokenRepository.findByUserId(user.getId()).isPresent()) {
             refreshTokenRepository.updateRefreshTokenById(refreshToken.getToken(),user.getId());
         }
+        else {
+            refreshTokenRepository.save(refreshToken);
+        }
+
         return LoginResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email((user.getEmail()))
-                .refreshToken(tokenProvider.generateToken(user,"Refresh"))
+                .refreshToken(refreshToken.getRefreshToken())
                 .accessToken(tokenProvider.generateToken(user,"Access"))
                 .build();
 
