@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "RefreshToken")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity(name = "RefreshToken")
+@Entity()
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
