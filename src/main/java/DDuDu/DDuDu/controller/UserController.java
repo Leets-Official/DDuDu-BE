@@ -25,7 +25,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkEmailDuplicate(email));
     }
 
-    @GetMapping("/signup/username-check//{username}")//사용자 이름 중복 요청시 발생하는 메서드
+    @GetMapping("/signup/username-check/{username}")//사용자 이름 중복 요청시 발생하는 메서드
     public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username) {
         return ResponseEntity.ok(userService.checkUsernameDuplicate(username));
     }
@@ -45,5 +45,4 @@ public class UserController {
             return ResponseEntity.status(500).body("Internal server error");
         }
     }
-
 }

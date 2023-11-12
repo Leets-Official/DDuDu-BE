@@ -1,6 +1,5 @@
 package DDuDu.DDuDu.service;
 
-import DDuDu.DDuDu.config.WebSecurityConfig;
 import DDuDu.DDuDu.config.jwt.TokenProvider;
 import DDuDu.DDuDu.domain.RefreshToken;
 import DDuDu.DDuDu.domain.User;
@@ -9,7 +8,6 @@ import DDuDu.DDuDu.repository.RefreshTokenRepository;
 import DDuDu.DDuDu.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService {
-    @Autowired
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -44,7 +41,7 @@ public class UserService {
     }
 
     @Transactional
-    public LoginResponse loginService(LoginRequest request) throws Exception {
+    public LoginResponse loginService(LoginRequest request) {
 
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
@@ -69,7 +66,6 @@ public class UserService {
                 .refreshToken(refreshToken.getRefreshToken())
                 .accessToken(tokenProvider.generateToken(user, "Access"))
                 .build();
-
     }
 
     public User findById(Long id) {

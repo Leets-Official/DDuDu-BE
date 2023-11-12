@@ -1,7 +1,10 @@
 package DDuDu.DDuDu.config.jwt;
 
 import DDuDu.DDuDu.domain.User;
+import DDuDu.DDuDu.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,8 +20,9 @@ import java.util.Set;
 public class TokenProvider {
 
     private final static long ACCESS_TIME = 60 * 1000L;
-    private final static long REFRESH_TIME = 2 * 60 * 1000L;
+    private final static long REFRESH_TIME = 30 * 60 * 1000L;
     private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public static Claims extractClaims(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
@@ -60,12 +64,37 @@ public class TokenProvider {
                 .compact();
     }
 
+    public String resolveAccessToken(HttpServletRequest request) {
+        if (request.getHeader("Authorization") != null)
+            return request.getHeader("Authorization").substring(7);
+        return null;
+    }
+
+    public String resolveRefreshToken(HttpServletRequest request) {
+        if (request.getHeader("RefreshToken") != null)
+            return request.getHeader("RefreshToken").substring(7);
+        return null;
+    }
+
+    public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
+        response.setHeader("authorization", "bearer " + accessToken);
+    }
+
+    // 리프레시 토큰 헤더 설정
+    public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
+        response.setHeader("refreshToken", "bearer " + refreshToken);
+    }
+
+    public boolean existsRefreshToken(String refreshToken) {
+        return refreshTokenRepository.existsByRefreshToken(refreshToken);
+    }
+
     public boolean validToken(String token) {
         try {
-            Jwts.parser()
+            Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(jwtProperties.getSecretKey())
                     .parseClaimsJws(token);
-            return true;
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
