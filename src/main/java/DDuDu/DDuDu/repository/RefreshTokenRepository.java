@@ -10,9 +10,10 @@ import java.util.Optional;
 
 @Transactional
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+
     Optional<RefreshToken> findByUserId(Long userid);
-    
     Optional<RefreshToken> findByRefreshToken(String refreshToken);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE RefreshToken set refreshToken = :refreshtoken where userId = :userId", nativeQuery = true)

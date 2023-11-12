@@ -1,6 +1,5 @@
 package DDuDu.DDuDu.config.jwt;
 
-import DDuDu.DDuDu.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,35 +10,35 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 // OncePerRequestFilter : 매번 들어갈 때 마다 체크 해주는 필터
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private final TokenProvider tokenProvider;
     private final static String HEADER_AUTHORIZATION = "Authorization";
     private final static String TOKEN_PREFIX = "Bearer ";
+    private final TokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
         String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         String token = getAccessToken(authorizationHeader);
+
         if (token != null && tokenProvider.validToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
     private String getAccessToken(String authorizationHeader) {
+
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             return authorizationHeader.substring(TOKEN_PREFIX.length());
         }
+
         return null;
     }
 
