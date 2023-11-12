@@ -17,7 +17,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", updatable = false , nullable = false)
+    @Column(name = "user_id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false,unique = true, length = 10)
+    @Column(name = "username", nullable = false, unique = true, length = 10)
     private String username;
 
     @Builder
@@ -53,10 +53,13 @@ public class User implements UserDetails {
         return this;
     }
 
+    public String getNickname() {
+        return username;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override

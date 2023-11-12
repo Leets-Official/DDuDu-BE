@@ -2,6 +2,7 @@ package DDuDu.DDuDu.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import DDuDu.DDuDu.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +15,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig {
 
     private final UserDetailService userService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests()
-                    .requestMatchers("/login", "/signup/**","/exception/**", "/items/**").permitAll()
-                    .anyRequest().authenticated()
-                .and()
                 .csrf().disable()
+                .httpBasic().disable()
+                .authorizeRequests(request ->
+                        request.requestMatchers(
+                                "/login/**",
+                                "/signup/**",
+                                "/exception/**",
+                                "/items/**")
+                                .permitAll()
+                                .anyRequest().authenticated()
+                )
                 .build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -32,8 +41,12 @@ public class WebSecurityConfig {
                 .and()
                 .build();
     }
+
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder()
+    {
         return new BCryptPasswordEncoder();
-    }}
+    }
+
+}
 
