@@ -53,6 +53,9 @@ public class User implements UserDetails {
         return this;
     }
 
+    public String getNickname() {
+        return username;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,7 +64,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

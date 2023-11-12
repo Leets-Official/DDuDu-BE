@@ -40,6 +40,7 @@ public class UserService {
 
     @Transactional
     public LoginResponse loginService(LoginRequest request) throws Exception{
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
@@ -50,6 +51,7 @@ public class UserService {
         }
 
         RefreshToken refreshToken = new RefreshToken(user.getId(), tokenProvider.generateToken(user,"Refresh"));
+
         if (refreshTokenRepository.findByUserId(user.getId()).isPresent()) {
             refreshTokenRepository.updateRefreshTokenById(refreshToken.getToken(),user.getId());
         }
@@ -59,16 +61,18 @@ public class UserService {
 
         return LoginResponse.builder()
                 .id(user.getId())
-                .username(user.getUsername())
-                .email((user.getEmail()))
+                .username(user.getNickname())
+                .email((user.getUsername()))
                 .refreshToken(refreshToken.getRefreshToken())
                 .accessToken(tokenProvider.generateToken(user,"Access"))
                 .build();
 
     }
+
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Unexpect User"));
     }
+
     public Optional<User> getLoginUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
