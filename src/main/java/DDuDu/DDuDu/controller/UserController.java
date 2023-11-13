@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkUsernameDuplicate(username));
     }
 
-    @PostMapping("/login/token")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             LoginResponse loginResponse = userService.loginService(loginRequest);
