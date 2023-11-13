@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  PROJECT_NAME: ddudu
+  BUCKET_NAME: ddudu-cicd-bucket
+  CODE_DEPLOY_APP_NAME: ddudu_cicd
+  DEPLOYMENT_GROUP_NAME: ddudu
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -36,11 +42,11 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://ddudu-cicd-bucket/DDuDu/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
       - name: Code Deploy To EC2 instance
         run: aws deploy create-deployment
-          --application-name ddudu_cicd
+          --application-name $CODE_DEPLOY_APP_NAME
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name ddudu
-          --s3-location bucket=ddudu-cicd-bucket,bundleType=zip,key=DDuDu/$GITHUB_SHA.zip
+          --deployment-group-name $DEPLOYMENT_GROUP_NAME
+          --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
