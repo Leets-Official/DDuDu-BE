@@ -19,8 +19,8 @@ import java.util.Set;
 @Service
 public class TokenProvider {
 
-    private final static long ACCESS_TIME = 60 * 1000L;
-    private final static long REFRESH_TIME = 30 * 60 * 1000L;
+    private final static long ACCESS_TIME = 120 * 60 * 1000L;
+    private final static long REFRESH_TIME = 20160 * 60 * 1000L;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRepository refreshTokenRepository;
 
