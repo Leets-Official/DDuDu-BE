@@ -1,6 +1,5 @@
 package DDuDu.DDuDu.config;
 
-import DDuDu.DDuDu.config.jwt.JwtProperties;
 import DDuDu.DDuDu.config.jwt.JwtTokenFilter;
 import DDuDu.DDuDu.config.jwt.TokenProvider;
 import DDuDu.DDuDu.repository.RefreshTokenRepository;
