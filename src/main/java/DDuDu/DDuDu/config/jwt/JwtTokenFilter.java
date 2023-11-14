@@ -25,8 +25,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private static final List<String> IGNORE_JWT_FILTER_API = List.of(
             "/login",
             "/signup",
-            "/signup/email-check/{email}",
-            "/signup/username-check/{username}"
+            "/signup/email-check"
     );
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;

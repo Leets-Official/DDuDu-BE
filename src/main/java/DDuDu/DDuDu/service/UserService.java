@@ -23,8 +23,8 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder encoder;
 
-    public boolean checkEmailDuplicate(String email) {
-        return userRepository.existsByEmail(email); //전달된 email이 저장되어있는지 여부를 boolean으로 리턴
+    public boolean checkEmailDuplicate(CheckDuplicateRequest dto) {
+        return userRepository.existsByEmail(dto.getEmail()); //전달된 email이 저장되어있는지 여부를 boolean으로 리턴
     }
 
     public boolean checkUsernameDuplicate(String username) {

@@ -25,14 +25,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/signup/email-check/{email}")//email 중복 요청시 발생하는 메서드
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
-        return ResponseEntity.ok(userService.checkEmailDuplicate(email));
-    }
-
-    @GetMapping("/signup/username-check/{username}")//사용자 이름 중복 요청시 발생하는 메서드
-    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username) {
-        return ResponseEntity.ok(userService.checkUsernameDuplicate(username));
+    @PostMapping("/signup/email-check")//email 중복 요청시 발생하는 메서드
+    public ResponseEntity<Boolean> checkEmailDuplicate(@RequestBody CheckDuplicateRequest checkDuplicateRequest) {
+        return ResponseEntity.ok(userService.checkEmailDuplicate(checkDuplicateRequest));
     }
 
     @PostMapping("/login")
