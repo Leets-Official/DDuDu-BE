@@ -16,8 +16,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup") //회원가입 요청시 발생하는 메서드
-    public void registerUser(@RequestBody AddUserRequest request) {
-        userService.save(request);
+    public String registerUser(@RequestBody AddUserRequest request) {
+        try {
+            userService.save(request);
+            return "Success";
+        } catch (Exception e) {
+            return "Fail";
+        }
     }
 
     @GetMapping("/signup/email-check/{email}")//email 중복 요청시 발생하는 메서드
