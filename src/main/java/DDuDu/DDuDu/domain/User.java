@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false, unique = true, length = 10)
+    @Column(name = "username", nullable = false, length = 10)
     private String username;
 
     @Builder
@@ -42,11 +42,13 @@ public class User implements UserDetails {
 
         return this;
     }
+
     public User updateEmail(String email) {
         this.email = email;
 
         return this;
     }
+
     public User updatePassword(String password) {
         this.password = password;
 
