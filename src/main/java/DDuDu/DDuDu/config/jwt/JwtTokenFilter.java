@@ -23,10 +23,10 @@ import java.util.List;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private static final List<String> IGNORE_JWT_FILTER_API = List.of(
-            "/login/token",
-            "/user/refresh",
-            "/admin/login",
-            "/admin/refresh"
+            "/login",
+            "/signup",
+            "/signup/email-check/{email}",
+            "/signup/username-check/{username}"
     );
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
