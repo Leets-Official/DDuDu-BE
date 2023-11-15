@@ -1,9 +1,11 @@
 package DDuDu.DDuDu.service;
 
 import DDuDu.DDuDu.domain.Item;
+import DDuDu.DDuDu.domain.User;
 import DDuDu.DDuDu.dto.AddItemRequest;
 import DDuDu.DDuDu.dto.UpdateItemRequest;
 import DDuDu.DDuDu.repository.ItemRepository;
+import DDuDu.DDuDu.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,11 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
-    public Item save(AddItemRequest request) {
+    public Item save(AddItemRequest request, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("DDudu not found: " + userId));
+        request.setUser(user);
         return itemRepository.save(request.toEntity());
     }
 
