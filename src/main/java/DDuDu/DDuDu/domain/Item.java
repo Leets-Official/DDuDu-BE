@@ -6,7 +6,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -27,8 +29,9 @@ public class Item {
     @Column(nullable = false)
     private String content;
 
+    @CreatedDate
     @Column(name = "create_date", nullable = false)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @Column(nullable = true)
     private Date deadline;
@@ -40,12 +43,13 @@ public class Item {
     private Boolean isRoutine;
 
     @Builder
-    public Item(String content, Date createDate, Date deadline, Boolean isCompleted, Boolean isRoutine) {
+    public Item(String content, LocalDateTime createDate, Date deadline, Boolean isCompleted, Boolean isRoutine, User user) {
         this.content = content;
         this.createDate = createDate;
         this.deadline = deadline;
         this.isCompleted = isCompleted;
         this.isRoutine = isRoutine;
+        this.user = user;
     }
 
     public void update(String content, Date deadline, Boolean isCompleted, Boolean isRoutine) {

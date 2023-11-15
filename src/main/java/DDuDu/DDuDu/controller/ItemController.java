@@ -1,5 +1,6 @@
 package DDuDu.DDuDu.controller;
 
+import DDuDu.DDuDu.config.jwt.TokenProvider;
 import DDuDu.DDuDu.domain.Item;
 import DDuDu.DDuDu.dto.AddItemRequest;
 import DDuDu.DDuDu.dto.ItemResponse;
@@ -17,10 +18,16 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final TokenProvider tokenProvider;
 
-    @PostMapping("/items")
-    public ResponseEntity<Item> addContent(@RequestBody AddItemRequest request) {
-        Item savedItem = itemService.save(request);
+    @PostMapping("/item")
+    public ResponseEntity<Item> addContent(@RequestBody AddItemRequest request,
+                                           @RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.substring(7);
+        Long userId = tokenProvider.getUserId(token);
+
+        Item savedItem = itemService.save(request, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItem);
