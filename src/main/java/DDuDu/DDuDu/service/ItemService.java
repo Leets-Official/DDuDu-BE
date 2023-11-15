@@ -25,8 +25,9 @@ public class ItemService {
         return itemRepository.save(request.toEntity());
     }
 
-    public List<Item> findAll() {
-        return itemRepository.findAll();
+    public List<Item> findAll(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+        return itemRepository.findByUser(user);
     }
 
     public Item findById(Long id) {

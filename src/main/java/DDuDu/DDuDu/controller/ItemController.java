@@ -20,7 +20,7 @@ public class ItemController {
     private final ItemService itemService;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("/item")
+    @PostMapping("/item") // 투두 생성
     public ResponseEntity<Item> addContent(@RequestBody AddItemRequest request,
                                            @RequestHeader("Authorization") String authorizationHeader) {
 
@@ -33,18 +33,24 @@ public class ItemController {
                 .body(savedItem);
     }
 
-    @GetMapping("/items")
-    public ResponseEntity<List<ItemResponse>> findAllItems() {
-        List<ItemResponse> items = itemService.findAll()
+    @GetMapping("/items") // 작성한 모든 투두 조회
+    public ResponseEntity<List<ItemResponse>> findAllItems(@RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.substring(7);
+        Long userId = tokenProvider.getUserId(token);
+
+        List<ItemResponse> items = itemService.findAll(userId)
                 .stream()
                 .map(ItemResponse::new)
                 .toList();
-
+        if (items.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return ResponseEntity.ok()
                 .body(items);
     }
 
-    @GetMapping("/items/{id}")
+    @GetMapping("/items/{id}") // 투두 하나 조회
     public ResponseEntity<ItemResponse> findItem(@PathVariable Long id) {
         Item item = itemService.findById(id);
 
@@ -52,7 +58,7 @@ public class ItemController {
                 .body(new ItemResponse(item));
     }
 
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/items/{id}") // 투두 삭제
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.delete(id);
 
@@ -60,7 +66,7 @@ public class ItemController {
                 .build();
     }
 
-    @PutMapping("items/{id}")
+    @PutMapping("items/{id}") // 투두 수정
     public ResponseEntity<Item> updateItem(@PathVariable Long id,
                                            @RequestBody UpdateItemRequest request) {
         Item updatedItem = itemService.update(id, request);
