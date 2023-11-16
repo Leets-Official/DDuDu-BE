@@ -66,7 +66,7 @@ public class ItemController {
                 .build();
     }
 
-    @PutMapping("item/{id}") // 투두 수정
+    @PutMapping("/item/{id}") // 투두 수정
     public ResponseEntity<Item> updateItem(@PathVariable Long id,
                                            @RequestBody UpdateItemRequest request) {
         Item updatedItem = itemService.update(id, request);
