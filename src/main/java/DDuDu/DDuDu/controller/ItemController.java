@@ -50,7 +50,7 @@ public class ItemController {
                 .body(items);
     }
 
-    @GetMapping("/items/{id}") // 투두 하나 조회
+    @GetMapping("/item/{id}") // 투두 하나 조회
     public ResponseEntity<ItemResponse> findItem(@PathVariable Long id) {
         Item item = itemService.findById(id);
 
@@ -58,7 +58,7 @@ public class ItemController {
                 .body(new ItemResponse(item));
     }
 
-    @DeleteMapping("/items/{id}") // 투두 삭제
+    @DeleteMapping("/item/{id}") // 투두 삭제
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         itemService.delete(id);
 
