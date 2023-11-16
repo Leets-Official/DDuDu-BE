@@ -44,7 +44,7 @@ public class ItemService {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("DDudu not found : " + id));
 
-        item.update(request.getContent(), request.getDeadline(), request.getIsCompleted(), request.getIsRoutine());
+        item.update(request.getId(), request.getContent(), request.getDeadline(), request.getIsCompleted(), request.getIsRoutine());
 
         return item;
     }

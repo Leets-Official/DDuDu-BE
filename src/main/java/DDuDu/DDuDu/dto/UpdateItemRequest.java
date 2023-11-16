@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 public class UpdateItemRequest {
+    private Long id;
     private String content;
     private Date deadline;
     private Boolean isCompleted;

@@ -52,7 +52,8 @@ public class Item {
         this.user = user;
     }
 
-    public void update(String content, Date deadline, Boolean isCompleted, Boolean isRoutine) {
+    public void update(Long id, String content, Date deadline, Boolean isCompleted, Boolean isRoutine) {
+        this.id = id;
         this.content = content;
         this.deadline = deadline;
         this.isCompleted = isCompleted;
