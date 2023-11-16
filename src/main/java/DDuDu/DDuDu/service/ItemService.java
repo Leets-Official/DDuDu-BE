@@ -27,7 +27,7 @@ public class ItemService {
 
     public List<Item> findAll(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
-        return itemRepository.findByUser(user);
+        return itemRepository.findByUserOrderByDeadlineAsc(user);
     }
 
     public Item findById(Long id) {
